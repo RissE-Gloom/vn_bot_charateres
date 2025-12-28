@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Telegraf, Markup } = require('telegraf');
+const http = require('http');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_ID = process.env.ADMIN_ID;
@@ -109,3 +110,12 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
 bot.launch();
 console.log('Бот запущен...');
+
+// Dummy server for Render port check
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot is running\n');
+}).listen(port, () => {
+    console.log(`Сервер для порта запущен на порту ${port}`);
+});
